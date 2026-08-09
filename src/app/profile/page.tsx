@@ -66,6 +66,18 @@ export default function ProfilePage() {
           </div>
         )}
 
+        {profile && profile.role !== 'shop_owner' && (
+          <div className="px-4 mt-3">
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-2xl p-4">
+              <div className="flex items-center gap-3">
+                <span className="text-3xl">🏪</span>
+                <div className="flex-1"><p className="font-bold text-blue-800">拥有您的店铺</p><p className="text-xs text-blue-600">认领或注册店铺，开始线上经营</p></div>
+                <Link href="/shops/claim" className="bg-blue-500 text-white px-4 py-1.5 rounded-full text-sm font-medium">立即入驻</Link>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="px-4 mt-4">
           <div className="flex items-center justify-between mb-3"><h3 className="font-bold text-lg">🐾 我的宠物</h3><Link href="/pets/new" className="text-orange-500 text-sm font-medium">+ 添加</Link></div>
           {petsLoading ? <Loading /> : pets.length === 0 ? (
@@ -78,9 +90,12 @@ export default function ProfilePage() {
         <div className="px-4 mt-6">
           <h3 className="font-bold text-lg mb-3">⚡ 快捷功能</h3>
           <div className="grid grid-cols-3 gap-3">
-            {[{ icon: '📍', label: '宠物追踪', href: '/pets/tracking' }, { icon: '📦', label: '我的订单', href: '/orders' }, { icon: '⚙️', label: '设置', href: '#' }].map((item) => (
-              <Link key={item.label} href={item.href} className="bg-gray-50 rounded-xl p-3 text-center active:scale-95 transition-all"><p className="text-2xl mb-1">{item.icon}</p><p className="text-xs text-gray-600">{item.label}</p></Link>
-            ))}
+            {profile?.role === 'shop_owner' && (
+              <Link href="/dashboard" className="bg-blue-50 rounded-xl p-3 text-center active:scale-95 transition-all"><p className="text-2xl mb-1">🏪</p><p className="text-xs text-blue-600 font-medium">店铺管理</p></Link>
+            )}
+            <Link href="/pets/tracking" className="bg-gray-50 rounded-xl p-3 text-center active:scale-95 transition-all"><p className="text-2xl mb-1">📍</p><p className="text-xs text-gray-600">宠物追踪</p></Link>
+            <Link href="/orders" className="bg-gray-50 rounded-xl p-3 text-center active:scale-95 transition-all"><p className="text-2xl mb-1">📦</p><p className="text-xs text-gray-600">我的订单</p></Link>
+            <Link href="#" className="bg-gray-50 rounded-xl p-3 text-center active:scale-95 transition-all"><p className="text-2xl mb-1">⚙️</p><p className="text-xs text-gray-600">设置</p></Link>
           </div>
         </div>
 

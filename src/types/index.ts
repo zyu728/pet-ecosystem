@@ -8,6 +8,7 @@ export interface Profile {
   avatar_url: string | null
   phone: string | null
   is_subscribed: boolean
+  role: 'user' | 'shop_owner'
   lat: number | null
   lng: number | null
   created_at: string
@@ -47,6 +48,7 @@ export interface Shop {
   rating: number
   cover_image: string | null
   description: string | null
+  owner_id: string | null
   created_at: string
 }
 
