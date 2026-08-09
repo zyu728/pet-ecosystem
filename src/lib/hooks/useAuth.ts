@@ -38,11 +38,18 @@ export function useAuth() {
     return () => subscription.unsubscribe()
   }, [])
 
+  const refreshProfile = async () => {
+    if (user) {
+      const p = await getProfile(user.id)
+      setProfile(p)
+    }
+  }
+
   const signOut = async () => {
     await supabase.auth.signOut()
     setUser(null)
     setProfile(null)
   }
 
-  return { user, profile, loading, signOut }
+  return { user, profile, loading, signOut, refreshProfile }
 }

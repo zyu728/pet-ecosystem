@@ -31,7 +31,7 @@ export default function ClaimPage() {
   const handleClaim = async (shopId: string) => {
     setClaiming(true)
     const ok = await claimShop(user.id, shopId)
-    if (ok) { router.push('/dashboard'); router.refresh() }
+    if (ok) { window.location.href = '/dashboard' }
     else { alert('认领失败，可能已被他人认领'); setClaiming(false) }
   }
 
@@ -44,8 +44,7 @@ export default function ClaimPage() {
       business_hours: form.business_hours || null, description: form.description || null,
       cover_image: null,
     })
-    router.push('/dashboard')
-    router.refresh()
+    window.location.href = '/dashboard'
   }
 
   return (
