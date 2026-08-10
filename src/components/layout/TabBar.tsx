@@ -17,6 +17,9 @@ export default function TabBar() {
       <Link href="/map" className={`flex flex-col items-center justify-center text-xs transition-colors ${pathname.startsWith('/map') ? 'text-orange-500' : 'text-gray-500'}`}>
         <span className="text-xl mb-0.5">📍</span><span>地图</span>
       </Link>
+      <Link href="/community" className={`flex flex-col items-center justify-center text-xs transition-colors ${pathname.startsWith('/community') ? 'text-orange-500' : 'text-gray-500'}`}>
+        <span className="text-xl mb-0.5">🐾</span><span>社区</span>
+      </Link>
       <Link href="/discover" className={`flex flex-col items-center justify-center text-xs transition-colors ${pathname.startsWith('/discover') ? 'text-orange-500' : 'text-gray-500'}`}>
         <span className="text-xl mb-0.5">🔍</span><span>发现</span>
       </Link>

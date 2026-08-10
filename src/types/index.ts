@@ -132,3 +132,29 @@ export interface MapMarker {
 // ===== 筛选类型 =====
 
 export type ShopFilter = 'all' | 'pet_shop' | 'pet_hospital' | 'grooming'
+
+// ===== 社区类型 =====
+
+export interface Post {
+  id: string
+  author_id: string
+  pet_id: string | null
+  content: string
+  images: string[]
+  created_at: string
+  // joined fields
+  author?: { nickname: string; avatar_url: string }
+  pet?: { name: string; species: string }
+  likes_count?: number
+  comments_count?: number
+  liked_by_me?: boolean
+}
+
+export interface PostComment {
+  id: string
+  post_id: string
+  author_id: string
+  content: string
+  created_at: string
+  author?: { nickname: string; avatar_url: string }
+}
