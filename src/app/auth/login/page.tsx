@@ -17,17 +17,13 @@ export default function LoginPage() {
     setLoading(true); setError('')
 
     if (isRegister) {
-      const { error } = await supabase.auth.signUp({ email, password })
-      if (error) setError('注册失败: ' + error.message)
-      else setError('')
-      // After signup, auto-login
+      const { error: signUpError } = await supabase.auth.signUp({ email, password })
+      if (signUpError) { setError('注册失败: ' + signUpError.message); setLoading(false); return }
     }
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
-    if (error) setError('登录失败: ' + error.message)
-    else { router.push('/map'); router.refresh() }
-
-    setLoading(false)
+    const { error: signInError } = await supabase.auth.signInWithPassword({ email, password })
+    if (signInError) { setError('登录失败: ' + signInError.message); setLoading(false); return }
+    router.push('/map'); router.refresh()
   }
 
   return (

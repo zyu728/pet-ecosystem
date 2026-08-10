@@ -9,17 +9,17 @@ async function run() {
   const configs = [
     {
       name: 'Session Pooler',
-      host: 'aws-0-ap-southeast-1.pooler.supabase.com',
-      port: 6543,
-      user: 'postgres.alpeldmxyjxskjebvzbt',
-      password: 'alpeldmxyjxskjebvzbt',
+      host: process.env.SUPABASE_DB_HOST || 'aws-0-ap-southeast-1.pooler.supabase.com',
+      port: parseInt(process.env.SUPABASE_DB_PORT || '6543'),
+      user: process.env.SUPABASE_DB_USER || '',
+      password: process.env.SUPABASE_DB_PASSWORD || '',
     },
     {
       name: 'Direct',
-      host: 'db.alpeldmxyjxskjebvzbt.supabase.co',
-      port: 5432,
-      user: 'postgres',
-      password: 'alpeldmxyjxskjebvzbt',
+      host: process.env.SUPABASE_DB_DIRECT_HOST || 'db.alpeldmxyjxskjebvzbt.supabase.co',
+      port: parseInt(process.env.SUPABASE_DB_DIRECT_PORT || '5432'),
+      user: process.env.SUPABASE_DB_DIRECT_USER || 'postgres',
+      password: process.env.SUPABASE_DB_DIRECT_PASSWORD || '',
     },
   ];
 

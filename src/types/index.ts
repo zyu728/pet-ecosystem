@@ -114,6 +114,21 @@ export interface Order {
   created_at: string
 }
 
+export interface OrderRow {
+  id: string
+  buyer_id: string
+  shop_id: string
+  items: OrderItem[]
+  total_amount: number
+  status: string
+  delivery_address: string
+  payment_status: string
+  delivery_method: string
+  tracking_number: string | null
+  estimated_time: string | null
+  created_at: string
+}
+
 export interface OrderItem {
   product_id: string
   product_name: string

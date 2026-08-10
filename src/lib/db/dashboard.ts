@@ -40,7 +40,8 @@ export async function registerShop(
     .from('shops').insert({ ...shopData, owner_id: userId, rating: 0 }).select().single()
   if (shopError) return null
 
-  await supabase.from('profiles').update({ role: 'shop_owner' }).eq('id', userId)
+  const { error: profileError } = await supabase.from('profiles').update({ role: 'shop_owner' }).eq('id', userId)
+  if (profileError) { /* role update failed but shop exists */ }
   return shop as Shop
 }
 
