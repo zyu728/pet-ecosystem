@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useAuth } from '@/lib/hooks/useAuth'
 import { getOwnerShop, getShopOrders, updateOrderStatus } from '@/lib/db/dashboard'
+import Modal from '@/components/ui/Modal'
+import Input from '@/components/ui/Input'
 import Loading from '@/components/ui/Loading'
 import type { Shop, Order } from '@/types'
 
@@ -21,6 +23,7 @@ export default function DashboardOrdersPage() {
   const [shop, setShop] = useState<Shop | null>(null)
   const [orders, setOrders] = useState<Order[]>([])
   const [loading, setLoading] = useState(true)
+  const [trackingModal, setTrackingModal] = useState<{orderId: string; tn: string; et: string} | null>(null)
 
   const loadData = async () => {
     if (!user) return
@@ -39,12 +42,13 @@ export default function DashboardOrdersPage() {
     loadData()
   }
 
-  const handleTracking = async (orderId: string) => {
-    const tn = prompt('运单号：')
-    if (!tn) return
-    const et = prompt('预计送达时间（如：今天下午 或 明天上午）：')
+  const handleTrackingSubmit = async () => {
+    if (!trackingModal) return
     const supabase = createClient()
-    await supabase.from('orders').update({ tracking_number: tn, estimated_time: et || null }).eq('id', orderId)
+    await supabase.from('orders').update({
+      tracking_number: trackingModal.tn, estimated_time: trackingModal.et || null,
+    }).eq('id', trackingModal.orderId)
+    setTrackingModal(null)
     loadData()
   }
 
@@ -78,7 +82,7 @@ export default function DashboardOrdersPage() {
                       <button onClick={() => updateOrderStatus(order.id, 'confirmed').then(loadData)} className="bg-green-500 text-white text-xs px-3 py-1 rounded-full font-medium">确认收款</button>
                     )}
                     {order.status === 'confirmed' && (
-                      <button onClick={() => handleTracking(order.id)} className="bg-blue-500 text-white text-xs px-3 py-1 rounded-full font-medium">📦 填运单</button>
+                      <button onClick={() => setTrackingModal({orderId: order.id, tn: '', et: ''})} className="bg-blue-500 text-white text-xs px-3 py-1 rounded-full font-medium">📦 填运单</button>
                     )}
                     {status?.next && (order as any).payment_status !== 'unpaid' && (
                       <button onClick={() => handleStatusChange(order.id, status.next!)} className="bg-orange-500 text-white text-xs px-3 py-1 rounded-full font-medium">
@@ -95,6 +99,12 @@ export default function DashboardOrdersPage() {
           })}
         </div>
       )}
+
+      <Modal isOpen={!!trackingModal} onClose={() => setTrackingModal(null)} title="📦 填写运单信息">
+        <Input label="运单号" value={trackingModal?.tn || ''} onChange={(e) => setTrackingModal({...trackingModal!, tn: e.target.value})} placeholder="如：SF1234567890" />
+        <Input label="预计送达时间" value={trackingModal?.et || ''} onChange={(e) => setTrackingModal({...trackingModal!, et: e.target.value})} placeholder="如：今天下午3点" />
+        <button onClick={handleTrackingSubmit} disabled={!trackingModal?.tn.trim()} className="w-full bg-blue-500 text-white py-3 rounded-lg font-medium mt-2 disabled:opacity-50">确认保存</button>
+      </Modal>
     </div>
   )
 }

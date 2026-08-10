@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next'
+import ClientLayout from '@/components/ClientLayout'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -17,9 +18,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="zh-CN">
       <body>
-        <main className="min-h-screen max-w-[480px] mx-auto relative bg-white shadow-lg">
-          {children}
-        </main>
+        <ClientLayout>
+          <main className="min-h-screen max-w-[480px] mx-auto relative bg-white shadow-lg">
+            {children}
+          </main>
+        </ClientLayout>
       </body>
     </html>
   )
