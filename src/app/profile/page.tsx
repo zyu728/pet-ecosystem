@@ -1,10 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useAuth } from '@/lib/hooks/useAuth'
 import { usePets } from '@/lib/hooks/usePets'
 import { subscribeUser } from '@/lib/db/profiles'
 import { createCollar } from '@/lib/db/tracking'
+import { getUnreadCount } from '@/lib/db/geofence'
 import { generateDeviceSerial } from '@/lib/utils/helpers'
 import TabBar from '@/components/layout/TabBar'
 import Avatar from '@/components/ui/Avatar'
@@ -20,6 +21,11 @@ export default function ProfilePage() {
   const [showSubscribe, setShowSubscribe] = useState(false)
   const [subscribeForm, setSubscribeForm] = useState({ address: '', petId: '' })
   const [subscribed, setSubscribed] = useState(false)
+  const [alertCount, setAlertCount] = useState(0)
+
+  useEffect(() => {
+    if (user?.id) getUnreadCount(user.id).then(setAlertCount)
+  }, [user])
 
   if (authLoading) return <Loading />
   if (!user) {
@@ -42,6 +48,14 @@ export default function ProfilePage() {
     <>
       <div className="pb-14">
         <div className="bg-gradient-to-b from-orange-100 to-white px-4 pt-8 pb-4">
+          <div className="flex justify-end mb-2">
+            <Link href="/alerts" className="relative text-2xl" onClick={() => setAlertCount(0)}>
+              🔔
+              {alertCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">{alertCount > 9 ? '9+' : alertCount}</span>
+              )}
+            </Link>
+          </div>
           <div className="flex items-center gap-4">
             <Avatar src={profile?.avatar_url} name={profile?.nickname || '用户'} size="xl" />
             <div>

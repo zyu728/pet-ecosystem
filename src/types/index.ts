@@ -158,3 +158,26 @@ export interface PostComment {
   created_at: string
   author?: { nickname: string; avatar_url: string }
 }
+
+// ===== 电子围栏类型 =====
+
+export interface Geofence {
+  id: string
+  pet_id: string
+  lat: number
+  lng: number
+  radius_meters: number
+  enabled: boolean
+  created_at: string
+}
+
+export interface Alert {
+  id: string
+  user_id: string
+  pet_id: string
+  message: string
+  lat: number | null
+  lng: number | null
+  is_read: boolean
+  created_at: string
+}
