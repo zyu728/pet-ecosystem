@@ -10,7 +10,7 @@ import Link from 'next/link'
 import type { Shop } from '@/types'
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const { user, profile, loading: authLoading } = useAuth()
+  const { user, loading: authLoading } = useAuth()
   const [shop, setShop] = useState<Shop | null>(null)
   const [shopLoading, setShopLoading] = useState(true)
   const router = useRouter()
