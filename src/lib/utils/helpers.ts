@@ -1,13 +1,3 @@
-export function formatDistance(meters: number): string {
-  if (meters < 1000) return `${Math.round(meters)}m`
-  return `${(meters / 1000).toFixed(1)}km`
-}
-
-export function formatTime(dateStr: string): string {
-  const d = new Date(dateStr)
-  return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-}
-
 export function formatDate(dateStr: string): string {
   const d = new Date(dateStr)
   return d.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' })

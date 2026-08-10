@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>商丘宠物生态平台</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: #faf8f5;
+  display: flex; justify-content: center; padding: 20px;
+}
+.poster {
+  width: 375px;
+  background: linear-gradient(180deg, #fff5f0 0%, #fff 40%);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.12);
+}
+.header {
+  background: linear-gradient(135deg, #ff6b35, #ff8c5a);
+  padding: 32px 24px 40px;
+  text-align: center;
+  position: relative;
+}
+.header::after {
+  content: ''; position: absolute; bottom: -20px; left: 0; right: 0;
+  height: 40px; background: #fff; border-radius: 50% 50% 0 0;
+}
+.header .logo { font-size: 48px; margin-bottom: 8px; }
+.header h1 { color: #fff; font-size: 22px; font-weight: 800; }
+.header p { color: rgba(255,255,255,0.85); font-size: 13px; margin-top: 4px; }
+.features { padding: 12px 20px 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.feature {
+  background: #fff; border-radius: 16px; padding: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05); text-align: center;
+}
+.feature .icon { font-size: 28px; margin-bottom: 6px; }
+.feature .title { font-size: 13px; font-weight: 700; color: #333; }
+.feature .desc { font-size: 11px; color: #999; margin-top: 2px; }
+.map-preview {
+  margin: 0 20px 20px;
+  background: #e8f4f8; border-radius: 16px; padding: 16px;
+  text-align: center; border: 2px dashed #b8d8e8;
+}
+.map-preview .dots { font-size: 24px; letter-spacing: 6px; margin-bottom: 4px; }
+.map-preview .text { font-size: 12px; color: #666; }
+.cta {
+  margin: 0 20px 24px;
+  background: linear-gradient(135deg, #ff6b35, #ff4500);
+  border-radius: 16px; padding: 20px; text-align: center;
+  color: #fff;
+}
+.cta h3 { font-size: 18px; font-weight: 800; margin-bottom: 4px; }
+.cta p { font-size: 12px; opacity: 0.9; margin-bottom: 12px; }
+.cta .qr-row { display: flex; align-items: center; justify-content: center; gap: 16px; }
+.cta .qr-box {
+  width: 80px; height: 80px; background: #fff; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 40px;
+}
+.cta .qr-text { font-size: 11px; text-align: left; line-height: 1.6; }
+.footer {
+  text-align: center; padding: 0 20px 24px;
+  font-size: 11px; color: #bbb;
+}
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <div class="header">
+    <div class="logo">🐾</div>
+    <h1>商丘宠物生态平台</h1>
+    <p>找店铺 · 查医院 · 宠友交流 · 宠物追踪</p>
+  </div>
+
+  <div class="features">
+    <div class="feature">
+      <div class="icon">🗺️</div>
+      <div class="title">宠物地图</div>
+      <div class="desc">一键查找附近宠物店、医院</div>
+    </div>
+    <div class="feature">
+      <div class="icon">🐕</div>
+      <div class="title">宠物档案</div>
+      <div class="desc">疫苗提醒 · 健康记录</div>
+    </div>
+    <div class="feature">
+      <div class="icon">💬</div>
+      <div class="title">宠友社区</div>
+      <div class="desc">晒宠 · 交流 · 求助</div>
+    </div>
+    <div class="feature">
+      <div class="icon">📍</div>
+      <div class="title">GPS追踪</div>
+      <div class="desc">实时定位 · 电子围栏</div>
+    </div>
+  </div>
+
+  <div class="map-preview">
+    <div class="dots">🏥 🏪 🐾 🏪 🏥</div>
+    <div class="text">商丘市区 13 家宠物店/医院已上线</div>
+  </div>
+
+  <div class="cta">
+    <h3>🎁 免费领GPS追踪项圈</h3>
+    <p>注册即送，实时守护毛孩子安全</p>
+    <div class="qr-row">
+      <div class="qr-box">🐾</div>
+      <div class="qr-text">
+        微信扫码<br>或访问<br><strong>bare-lash.com</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    商丘 · 宠物生活新方式
+  </div>
+
+</div>
+</body>
+</html>
