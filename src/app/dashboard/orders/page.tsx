@@ -13,6 +13,8 @@ const statusLabels: Record<string, { label: string; color: string; next?: string
   done: { label: '已完成', color: 'text-green-500' },
 }
 
+const payLabels: Record<string, string> = { unpaid: '未付', paid: '已付', confirmed: '已确认' }
+
 export default function DashboardOrdersPage() {
   const { user } = useAuth()
   const [shop, setShop] = useState<Shop | null>(null)
@@ -51,18 +53,26 @@ export default function DashboardOrdersPage() {
               <div key={order.id} className="bg-white rounded-xl shadow-sm p-4">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-xs text-gray-400">{new Date(order.created_at).toLocaleString()}</span>
-                  <span className={`text-xs font-medium ${status?.color}`}>{status?.label}</span>
+                  <div className="flex gap-2">
+                    <span className={`text-xs px-2 py-0.5 rounded ${(order as any).payment_status === 'paid' ? 'bg-green-100 text-green-600' : (order as any).payment_status === 'confirmed' ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-500'}`}>💰 {payLabels[(order as any).payment_status || 'unpaid']}</span>
+                    <span className={`text-xs font-medium ${status?.color}`}>{status?.label}</span>
+                  </div>
                 </div>
                 {(order.items as any[]).map((item: any, i: number) => (
                   <p key={i} className="text-sm text-gray-700">{item.product_name} x{item.quantity} · ¥{item.price}</p>
                 ))}
                 <div className="border-t mt-2 pt-2 flex justify-between items-center">
                   <span className="font-bold text-orange-500">¥{order.total_amount}</span>
-                  {status?.next && (
-                    <button onClick={() => handleStatusChange(order.id, status.next!)} className="bg-orange-500 text-white text-xs px-3 py-1 rounded-full font-medium">
-                      → {statusLabels[status.next!].label}
-                    </button>
-                  )}
+                  <div className="flex gap-2">
+                    {(order as any).payment_status === 'paid' && (
+                      <button onClick={() => updateOrderStatus(order.id, 'confirmed').then(loadData)} className="bg-green-500 text-white text-xs px-3 py-1 rounded-full font-medium">确认收款</button>
+                    )}
+                    {status?.next && (order as any).payment_status !== 'unpaid' && (
+                      <button onClick={() => handleStatusChange(order.id, status.next!)} className="bg-orange-500 text-white text-xs px-3 py-1 rounded-full font-medium">
+                        → {statusLabels[status.next!].label}
+                      </button>
+                    )}
+                  </div>
                 </div>
                 {order.delivery_address && <p className="text-xs text-gray-400 mt-1">📍 {order.delivery_address}</p>}
               </div>

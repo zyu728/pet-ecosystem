@@ -67,14 +67,24 @@ export default function ShopDetailPage() {
         </div>
       </div>
 
-      <Modal isOpen={!!selectedProduct} onClose={() => setSelectedProduct(null)} title={orderSuccess ? '✅ 下单成功' : '确认订单'}>
+      <Modal isOpen={!!selectedProduct} onClose={() => setSelectedProduct(null)} title={orderSuccess ? (shop.payment_qr ? '📱 扫码支付' : '✅ 下单成功') : '确认订单'}>
         {orderSuccess ? (
-          <div className="text-center py-4"><p className="text-4xl mb-2">🎉</p><p className="text-gray-600">订单已提交，店铺将尽快处理</p><p className="text-gray-400 text-sm mt-1">当前为货到付款</p></div>
+          shop.payment_qr ? (
+            <div className="text-center">
+              <p className="text-sm text-gray-600 mb-2">请使用微信或支付宝扫码付款</p>
+              <p className="text-orange-500 font-bold text-xl mb-3">¥{selectedProduct?.price}</p>
+              <img src={shop.payment_qr} alt="收款码" className="w-48 h-48 object-contain mx-auto rounded-xl border" />
+              <p className="text-xs text-gray-400 mt-3">扫码付款后点击下方按钮</p>
+              <button onClick={() => setSelectedProduct(null)} className="w-full bg-green-500 text-white py-3 rounded-lg font-medium mt-3">我已付款</button>
+            </div>
+          ) : (
+            <div className="text-center py-4"><p className="text-4xl mb-2">🎉</p><p className="text-gray-600">订单已提交</p><p className="text-gray-400 text-sm mt-1">货到付款</p></div>
+          )
         ) : selectedProduct && (
           <>
             <div className="bg-gray-50 rounded-lg p-3 mb-4"><p className="font-medium">{selectedProduct.name}</p><p className="text-orange-500 font-bold text-lg">¥{selectedProduct.price}</p></div>
             <div className="mb-4"><label className="block text-sm font-medium text-gray-700 mb-1">配送地址</label><input type="text" value={deliveryAddress} onChange={(e) => setDeliveryAddress(e.target.value)} placeholder="请输入收货地址" className="w-full border border-gray-300 rounded-lg px-3 py-2.5 outline-none focus:ring-2 focus:ring-orange-400" /></div>
-            <button onClick={handleConfirmOrder} disabled={!deliveryAddress.trim()} className="w-full bg-orange-500 text-white py-3 rounded-lg font-medium disabled:bg-gray-300">确认下单（货到付款）</button>
+            <button onClick={handleConfirmOrder} disabled={!deliveryAddress.trim()} className="w-full bg-orange-500 text-white py-3 rounded-lg font-medium disabled:bg-gray-300">确认下单</button>
           </>
         )}
       </Modal>

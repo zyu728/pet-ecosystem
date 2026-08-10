@@ -42,7 +42,7 @@ export default function ClaimPage() {
       name: form.name, type: form.type as any, address: form.address,
       lat: parseFloat(form.lat), lng: parseFloat(form.lng), phone: form.phone || null,
       business_hours: form.business_hours || null, description: form.description || null,
-      cover_image: null,
+      cover_image: null, payment_qr: null,
     })
     window.location.href = '/dashboard'
   }

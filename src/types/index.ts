@@ -49,6 +49,7 @@ export interface Shop {
   cover_image: string | null
   description: string | null
   owner_id: string | null
+  payment_qr: string | null
   created_at: string
 }
 
@@ -106,6 +107,7 @@ export interface Order {
   total_amount: number
   status: 'pending' | 'confirmed' | 'delivering' | 'done'
   delivery_address: string
+  payment_status: 'unpaid' | 'paid' | 'confirmed'
   created_at: string
 }
 
