@@ -30,12 +30,46 @@ export async function getFeed(): Promise<Post[]> {
   })) as Post[]
 }
 
-export async function createPost(authorId: string, petId: string | null, content: string): Promise<Post | null> {
+export async function createPost(authorId: string, petId: string | null, content: string, images: string[] = []): Promise<Post | null> {
   const supabase = createClient()
   const { data, error } = await supabase
-    .from('posts').insert({ author_id: authorId, pet_id: petId, content }).select().single()
+    .from('posts').insert({ author_id: authorId, pet_id: petId, content, images }).select().single()
   if (error) return null
   return data as Post
+}
+
+// Follows
+export async function toggleFollow(followerId: string, followingId: string): Promise<boolean> {
+  const supabase = createClient()
+  const { data: existing } = await supabase.from('follows').select('*').eq('follower_id', followerId).eq('following_id', followingId).single()
+  if (existing) {
+    await supabase.from('follows').delete().eq('follower_id', followerId).eq('following_id', followingId)
+    return false
+  } else {
+    await supabase.from('follows').insert({ follower_id: followerId, following_id: followingId })
+    return true
+  }
+}
+
+export async function isFollowing(followerId: string, followingId: string): Promise<boolean> {
+  const supabase = createClient()
+  const { data } = await supabase.from('follows').select('*').eq('follower_id', followerId).eq('following_id', followingId).single()
+  return !!data
+}
+
+export async function getFollowingIds(userId: string): Promise<Set<string>> {
+  const supabase = createClient()
+  const { data } = await supabase.from('follows').select('following_id').eq('follower_id', userId)
+  return new Set((data || []).map((f: any) => f.following_id))
+}
+
+export async function getFollowCounts(userId: string): Promise<{ followers: number; following: number }> {
+  const supabase = createClient()
+  const [{ count: followers }, { count: following }] = await Promise.all([
+    supabase.from('follows').select('*', { count: 'exact', head: true }).eq('following_id', userId),
+    supabase.from('follows').select('*', { count: 'exact', head: true }).eq('follower_id', userId),
+  ])
+  return { followers: followers || 0, following: following || 0 }
 }
 
 export async function deletePost(postId: string): Promise<boolean> {

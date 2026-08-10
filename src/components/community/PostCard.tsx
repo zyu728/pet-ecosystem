@@ -1,9 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/lib/hooks/useAuth'
-import { toggleLike, deletePost, getComments, addComment } from '@/lib/db/community'
+import { toggleLike, deletePost, getComments, addComment, toggleFollow, isFollowing } from '@/lib/db/community'
 import type { Post, PostComment } from '@/types'
 
 export default function PostCard({ post, onUpdate }: { post: Post; onUpdate: () => void }) {
@@ -13,6 +13,7 @@ export default function PostCard({ post, onUpdate }: { post: Post; onUpdate: () 
   const [comments, setComments] = useState<PostComment[]>([])
   const [commentText, setCommentText] = useState('')
   const [loadingComments, setLoadingComments] = useState(false)
+  const [following, setFollowing] = useState(false)
 
   const handleLike = async () => {
     if (!user) { router.push('/auth/login'); return }
@@ -48,6 +49,18 @@ export default function PostCard({ post, onUpdate }: { post: Post; onUpdate: () 
   const isMine = user?.id === post.author_id
   const timeStr = new Date(post.created_at).toLocaleDateString('zh-CN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
 
+  // Check follow status
+  useEffect(() => {
+    if (!user || isMine) return
+    isFollowing(user.id, post.author_id).then(setFollowing)
+  }, [user, post.author_id, isMine])
+
+  const handleFollow = async () => {
+    if (!user) { router.push('/auth/login'); return }
+    const ok = await toggleFollow(user.id, post.author_id)
+    setFollowing(ok)
+  }
+
   return (
     <div className="bg-white rounded-xl shadow-sm p-4">
       {/* 头部 */}
@@ -61,13 +74,25 @@ export default function PostCard({ post, onUpdate }: { post: Post; onUpdate: () 
             <p className="text-xs text-gray-400">{timeStr}{post.pet ? ` · ${post.pet.name}` : ''}</p>
           </div>
         </div>
-        {isMine && (
-          <button onClick={handleDelete} className="text-gray-300 text-xs">删除</button>
-        )}
+        <div className="flex items-center gap-2">
+          {!isMine && user && (
+            <button onClick={handleFollow} className={`text-xs px-2 py-0.5 rounded-full font-medium ${following ? 'bg-gray-100 text-gray-400' : 'bg-orange-100 text-orange-500'}`}>
+              {following ? '已关注' : '+ 关注'}
+            </button>
+          )}
+          {isMine && <button onClick={handleDelete} className="text-gray-300 text-xs">删除</button>}
+        </div>
       </div>
 
       {/* 内容 */}
       <p className="text-gray-800 text-sm mb-3 leading-relaxed">{post.content}</p>
+      {post.images && post.images.length > 0 && (
+        <div className={`grid gap-2 mb-3 ${post.images.length === 1 ? 'grid-cols-1' : 'grid-cols-2'}`}>
+          {post.images.map((img, i) => (
+            <img key={i} src={img} alt="" className="w-full h-48 object-cover rounded-xl" loading="lazy" />
+          ))}
+        </div>
+      )}
 
       {/* 操作栏 */}
       <div className="flex items-center gap-4 border-t pt-3">

@@ -54,6 +54,11 @@ export async function sendMessage(conversationId: string, senderId: string, cont
   return data as Message
 }
 
+export async function markAsRead(conversationId: string, userId: string): Promise<void> {
+  const supabase = createClient()
+  await supabase.from('messages').update({ read_at: new Date().toISOString() }).eq('conversation_id', conversationId).neq('sender_id', userId).is('read_at', null)
+}
+
 export function subscribeMessages(conversationId: string, onMessage: (message: Message) => void) {
   const supabase = createClient()
   return supabase
