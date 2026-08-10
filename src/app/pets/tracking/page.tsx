@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { useAuth } from '@/lib/hooks/useAuth'
 import { useAMap } from '@/lib/hooks/useAMap'
 import { useTracking } from '@/lib/hooks/useTracking'
+import { createClient } from '@/lib/supabase/client'
 import { getGeofence, saveGeofence, checkGeofence } from '@/lib/db/geofence'
 import Loading from '@/components/ui/Loading'
 import Modal from '@/components/ui/Modal'
@@ -28,6 +29,7 @@ function TrackingContent() {
   const [showGeofenceModal, setShowGeofenceModal] = useState(false)
   const [fenceRadius, setFenceRadius] = useState(500)
   const [notifyPermission, setNotifyPermission] = useState('default')
+  const [isRealMode, setIsRealMode] = useState(false)
 
   useEffect(() => { if ('Notification' in window) setNotifyPermission(Notification.permission) }, [])
 
@@ -47,6 +49,34 @@ function TrackingContent() {
     if (!petId) return
     getGeofence(petId).then(setGeofence)
   }, [petId])
+
+  // Realtime 订阅（真实模式）
+  useEffect(() => {
+    if (!isRealMode || !collar) return
+    const supabase = createClient()
+    const sub = supabase
+      .channel(`tracking:${collar.id}`)
+      .on('postgres_changes', {
+        event: 'INSERT', schema: 'public', table: 'tracking_records',
+        filter: `collar_id=eq.${collar.id}`,
+      }, (payload: any) => {
+        const rec = payload.new
+        // Check geofence automatically
+        if (petId && user) {
+          checkGeofence(petId, rec.lat, rec.lng, user.id).then((alert) => {
+            if (alert) notify('🚨 宠物出圈告警', alert.message)
+          })
+        }
+        // Manually reload all records
+        if (collar) {
+          import('@/lib/db/tracking').then(({ getTrackingRecords }) => {
+            getTrackingRecords(collar.id).then(() => {})
+          })
+        }
+      })
+      .subscribe()
+    return () => { sub.unsubscribe() }
+  }, [isRealMode, collar, petId, user])
 
   // 初始化地图
   useEffect(() => {
@@ -150,6 +180,9 @@ function TrackingContent() {
               {collar && <p className="text-xs text-gray-400">电量 {collar.battery_level}% · {records.length} 个点</p>}
             </div>
             <div className="flex gap-2">
+              <button onClick={() => setIsRealMode(!isRealMode)} className={`text-xs px-2 py-1 rounded-full ${isRealMode ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-600'}`}>
+                {isRealMode ? '📡 真实' : '🎮 模拟'}
+              </button>
               <button onClick={() => setShowGeofenceModal(true)} className="text-sm bg-green-500 text-white px-3 py-1 rounded-full">
                 {geofence ? '🛡️ 围栏' : '➕ 围栏'}
               </button>
