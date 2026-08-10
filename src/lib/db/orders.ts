@@ -17,7 +17,8 @@ export async function createOrder(
   shopId: string,
   items: OrderItem[],
   totalAmount: number,
-  deliveryAddress: string
+  deliveryAddress: string,
+  deliveryMethod: string = 'delivery'
 ): Promise<Order | null> {
   const supabase = createClient()
   const { data, error } = await supabase
@@ -28,6 +29,7 @@ export async function createOrder(
       items: items as any,
       total_amount: totalAmount,
       delivery_address: deliveryAddress,
+      delivery_method: deliveryMethod,
       status: 'pending',
     })
     .select()

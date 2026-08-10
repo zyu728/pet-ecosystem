@@ -19,6 +19,7 @@ export default function ShopDetailPage() {
   const [loading, setLoading] = useState(true)
   const [selectedProduct, setSelectedProduct] = useState<ShopProduct | null>(null)
   const [deliveryAddress, setDeliveryAddress] = useState('')
+  const [deliveryMethod, setDeliveryMethod] = useState('delivery')
   const [orderSuccess, setOrderSuccess] = useState(false)
 
   useEffect(() => { async function load() { const [s, p] = await Promise.all([getShop(id), getShopProducts(id)]); setShop(s); setProducts(p); setLoading(false) } load() }, [id])
@@ -30,7 +31,7 @@ export default function ShopDetailPage() {
 
   const handleConfirmOrder = async () => {
     if (!selectedProduct || !user || !deliveryAddress.trim()) return
-    await createOrder(user.id, shop!.id, [{ product_id: selectedProduct.id, product_name: selectedProduct.name, quantity: 1, price: selectedProduct.price }], selectedProduct.price, deliveryAddress)
+    await createOrder(user.id, shop!.id, [{ product_id: selectedProduct.id, product_name: selectedProduct.name, quantity: 1, price: selectedProduct.price }], selectedProduct.price, deliveryAddress, deliveryMethod)
     setOrderSuccess(true)
     setTimeout(() => { setSelectedProduct(null); setOrderSuccess(false) }, 2000)
   }
@@ -83,8 +84,18 @@ export default function ShopDetailPage() {
         ) : selectedProduct && (
           <>
             <div className="bg-gray-50 rounded-lg p-3 mb-4"><p className="font-medium">{selectedProduct.name}</p><p className="text-orange-500 font-bold text-lg">¥{selectedProduct.price}</p></div>
-            <div className="mb-4"><label className="block text-sm font-medium text-gray-700 mb-1">配送地址</label><input type="text" value={deliveryAddress} onChange={(e) => setDeliveryAddress(e.target.value)} placeholder="请输入收货地址" className="w-full border border-gray-300 rounded-lg px-3 py-2.5 outline-none focus:ring-2 focus:ring-orange-400" /></div>
-            <button onClick={handleConfirmOrder} disabled={!deliveryAddress.trim()} className="w-full bg-orange-500 text-white py-3 rounded-lg font-medium disabled:bg-gray-300">确认下单</button>
+            <div className="mb-3">
+              <label className="block text-sm font-medium text-gray-700 mb-1">配送方式</label>
+              <div className="flex gap-2">
+                {[{v:'delivery',l:'🚚 配送'},{v:'pickup',l:'🏪 自取'},{v:'express',l:'📦 快递'}].map(o => (
+                  <button key={o.v} onClick={() => setDeliveryMethod(o.v)} className={`flex-1 py-2 rounded-lg text-sm ${deliveryMethod===o.v ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-600'}`}>{o.l}</button>
+                ))}
+              </div>
+            </div>
+            {deliveryMethod !== 'pickup' && (
+              <div className="mb-4"><label className="block text-sm font-medium text-gray-700 mb-1">收货地址</label><input type="text" value={deliveryAddress} onChange={(e) => setDeliveryAddress(e.target.value)} placeholder="请输入收货地址" className="w-full border border-gray-300 rounded-lg px-3 py-2.5 outline-none focus:ring-2 focus:ring-orange-400" /></div>
+            )}
+            <button onClick={handleConfirmOrder} disabled={deliveryMethod !== 'pickup' && !deliveryAddress.trim()} className="w-full bg-orange-500 text-white py-3 rounded-lg font-medium disabled:bg-gray-300">确认下单</button>
           </>
         )}
       </Modal>

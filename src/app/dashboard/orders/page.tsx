@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { createClient } from '@/lib/supabase/client'
 import { useAuth } from '@/lib/hooks/useAuth'
 import { getOwnerShop, getShopOrders, updateOrderStatus } from '@/lib/db/dashboard'
 import Loading from '@/components/ui/Loading'
@@ -38,6 +39,15 @@ export default function DashboardOrdersPage() {
     loadData()
   }
 
+  const handleTracking = async (orderId: string) => {
+    const tn = prompt('运单号：')
+    if (!tn) return
+    const et = prompt('预计送达时间（如：今天下午 或 明天上午）：')
+    const supabase = createClient()
+    await supabase.from('orders').update({ tracking_number: tn, estimated_time: et || null }).eq('id', orderId)
+    loadData()
+  }
+
   if (loading) return <Loading />
 
   return (
@@ -67,6 +77,9 @@ export default function DashboardOrdersPage() {
                     {(order as any).payment_status === 'paid' && (
                       <button onClick={() => updateOrderStatus(order.id, 'confirmed').then(loadData)} className="bg-green-500 text-white text-xs px-3 py-1 rounded-full font-medium">确认收款</button>
                     )}
+                    {order.status === 'confirmed' && (
+                      <button onClick={() => handleTracking(order.id)} className="bg-blue-500 text-white text-xs px-3 py-1 rounded-full font-medium">📦 填运单</button>
+                    )}
                     {status?.next && (order as any).payment_status !== 'unpaid' && (
                       <button onClick={() => handleStatusChange(order.id, status.next!)} className="bg-orange-500 text-white text-xs px-3 py-1 rounded-full font-medium">
                         → {statusLabels[status.next!].label}
@@ -75,6 +88,8 @@ export default function DashboardOrdersPage() {
                   </div>
                 </div>
                 {order.delivery_address && <p className="text-xs text-gray-400 mt-1">📍 {order.delivery_address}</p>}
+                {(order as any).tracking_number && <p className="text-xs text-blue-500 mt-1">📦 {(order as any).tracking_number}</p>}
+                {(order as any).estimated_time && <p className="text-xs text-green-500 mt-1">⏱ 预计 {(order as any).estimated_time}</p>}
               </div>
             )
           })}

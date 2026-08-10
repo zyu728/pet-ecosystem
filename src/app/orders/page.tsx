@@ -48,6 +48,12 @@ export default function OrdersPage() {
                 ))}
                 <div className="border-t mt-2 pt-2 flex justify-between"><span className="text-sm text-gray-500">合计</span><span className="font-bold text-orange-500">¥{order.total_amount}</span></div>
                 {order.delivery_address && <p className="text-xs text-gray-400 mt-1">📍 {order.delivery_address}</p>}
+                {(order as any).tracking_number && <p className="text-xs text-blue-500 mt-1">📦 运单号: {(order as any).tracking_number}</p>}
+                {(order as any).estimated_time && <p className="text-xs text-green-500 mt-1">⏱ 预计: {(order as any).estimated_time}</p>}
+                <p className="text-xs text-gray-400 mt-1">
+                  {((order as any).delivery_method === 'pickup' ? '🏪 自取' : (order as any).delivery_method === 'express' ? '📦 快递' : '🚚 配送')}
+                  {' · '}{((order as any).payment_status === 'paid' ? '已付款' : (order as any).payment_status === 'confirmed' ? '已确认' : '未付款')}
+                </p>
               </div>
             )
           })}

@@ -108,6 +108,9 @@ export interface Order {
   status: 'pending' | 'confirmed' | 'delivering' | 'done'
   delivery_address: string
   payment_status: 'unpaid' | 'paid' | 'confirmed'
+  delivery_method: 'pickup' | 'delivery' | 'express'
+  tracking_number: string | null
+  estimated_time: string | null
   created_at: string
 }
 
