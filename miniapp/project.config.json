@@ -1,0 +1,12 @@
+{
+  "miniprogramRoot": ".",
+  "projectname": "pet-ecosystem",
+  "description": "商丘宠物生态平台",
+  "appid": "YOUR_APPID_HERE",
+  "setting": {
+    "urlCheck": true,
+    "es6": true,
+    "postcss": true,
+    "minified": true
+  }
+}

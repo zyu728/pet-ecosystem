@@ -1,0 +1,11 @@
+{
+  "pages": ["pages/index/index"],
+  "window": {
+    "navigationStyle": "custom"
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "用于地图显示附近的宠物店铺和医院"
+    }
+  }
+}
