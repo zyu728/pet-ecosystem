@@ -1,10 +1,11 @@
 import Link from 'next/link'
 import Avatar from '@/components/ui/Avatar'
+import EmptyState from '@/components/ui/EmptyState'
 import { formatDate } from '@/lib/utils/helpers'
 
 export default function ConversationList({ conversations }: { conversations: any[] }) {
   if (conversations.length === 0) {
-    return <div className="text-center py-20"><p className="text-4xl mb-3">💬</p><p className="text-gray-400">暂无消息</p><p className="text-gray-300 text-sm mt-1">去地图发现宠友，开始聊天吧</p></div>
+    return <EmptyState icon="💬" title="暂无消息" description="去地图发现宠友，开始聊天吧" />
   }
   return (
     <div className="divide-y">

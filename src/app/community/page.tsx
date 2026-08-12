@@ -7,6 +7,7 @@ import { getFeed } from '@/lib/db/community'
 import PostCard from '@/components/community/PostCard'
 import CreatePostModal from '@/components/community/CreatePostModal'
 import TabBar from '@/components/layout/TabBar'
+import EmptyState from '@/components/ui/EmptyState'
 import Loading from '@/components/ui/Loading'
 import type { Post } from '@/types'
 
@@ -34,11 +35,7 @@ export default function CommunityPage() {
         </div>
 
         {loading ? <Loading /> : posts.length === 0 ? (
-          <div className="text-center py-20 px-4">
-            <p className="text-4xl mb-3">🐣</p>
-            <p className="text-gray-400 mb-2">还没有动态</p>
-            <p className="text-gray-300 text-sm">点击右下角 + 发布第一条</p>
-          </div>
+          <EmptyState icon="🐣" title="还没有动态" description="点击右下角 + 发布第一条" />
         ) : (
           <div className="px-4 py-3 space-y-4">
             {posts.map((post) => (

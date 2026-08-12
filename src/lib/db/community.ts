@@ -30,10 +30,10 @@ export async function getFeed(): Promise<Post[]> {
   })) as Post[]
 }
 
-export async function createPost(authorId: string, petId: string | null, content: string, images: string[] = []): Promise<Post | null> {
+export async function createPost(authorId: string, petId: string | null, content: string, images: string[] = [], postType: string = 'normal'): Promise<Post | null> {
   const supabase = createClient()
   const { data, error } = await supabase
-    .from('posts').insert({ author_id: authorId, pet_id: petId, content, images }).select().single()
+    .from('posts').insert({ author_id: authorId, pet_id: petId, content, images, post_type: postType }).select().single()
   if (error) return null
   return data as Post
 }

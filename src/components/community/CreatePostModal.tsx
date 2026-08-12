@@ -14,6 +14,7 @@ export default function CreatePostModal({ isOpen, onClose, onCreated }: { isOpen
   const [petId, setPetId] = useState<string>('')
   const [files, setFiles] = useState<File[]>([])
   const [previews, setPreviews] = useState<string[]>([])
+  const [postType, setPostType] = useState('normal')
   const [posting, setPosting] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
 
@@ -34,7 +35,7 @@ export default function CreatePostModal({ isOpen, onClose, onCreated }: { isOpen
     if (files.length > 0) {
       images = await uploadImages(files)
     }
-    await createPost(user.id, petId || null, content.trim(), images)
+    await createPost(user.id, petId || null, content.trim(), images, postType)
     setContent(''); setPetId(''); setFiles([]); setPreviews([])
     setPosting(false)
     onCreated()
@@ -43,6 +44,11 @@ export default function CreatePostModal({ isOpen, onClose, onCreated }: { isOpen
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="发布动态">
+      <div className="flex gap-2 mb-3">
+        {[{v:'normal',l:'📝 日常'},{v:'help',l:'🆘 求助'},{v:'lost',l:'🔍 走失'}].map(t => (
+          <button key={t.v} onClick={() => setPostType(t.v)} className={`flex-1 py-2 rounded-lg text-sm font-medium ${postType===t.v ? (t.v==='help'?'bg-red-500 text-white':t.v==='lost'?'bg-amber-500 text-white':'bg-orange-500 text-white') : 'bg-gray-100 text-gray-500'}`}>{t.l}</button>
+        ))}
+      </div>
       {pets.length > 0 && (
         <div className="mb-3">
           <select value={petId} onChange={(e) => setPetId(e.target.value)} className="w-full border border-gray-200 rounded-lg px-3 py-2 outline-none text-sm">

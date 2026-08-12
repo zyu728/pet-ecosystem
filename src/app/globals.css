@@ -35,3 +35,9 @@
 @layer utilities {
   .text-balance { text-wrap: balance; }
 }
+
+/* Page entry animation */
+main > :not([class*="fixed"]) {
+  animation: fadeIn 0.2s ease-out;
+}
+

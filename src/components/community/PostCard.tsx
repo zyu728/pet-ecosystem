@@ -61,8 +61,15 @@ export default function PostCard({ post, onUpdate }: { post: Post; onUpdate: () 
     setFollowing(ok)
   }
 
+  const typeStyles: Record<string, string> = {
+    normal: '',
+    help: 'border-l-4 border-red-400 bg-red-50/30',
+    lost: 'border-l-4 border-amber-400 bg-amber-50/30',
+  }
+  const typeBadge: Record<string, string> = { help: '🆘 求助', lost: '🔍 走失' }
+
   return (
-    <div className="bg-white rounded-xl shadow-sm p-4">
+    <div className={`bg-white rounded-xl shadow-sm p-4 ${typeStyles[(post as any).post_type || 'normal']}`}>
       {/* 头部 */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
@@ -73,6 +80,7 @@ export default function PostCard({ post, onUpdate }: { post: Post; onUpdate: () 
             <p className="text-sm font-medium">{post.author?.nickname || '宠友'}</p>
             <p className="text-xs text-gray-400">{timeStr}{post.pet ? ` · ${post.pet.name}` : ''}</p>
           </div>
+          {(post as any).post_type !== 'normal' && <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${(post as any).post_type === 'help' ? 'bg-red-100 text-red-600' : 'bg-amber-100 text-amber-700'}`}>{typeBadge[(post as any).post_type]}</span>}
         </div>
         <div className="flex items-center gap-2">
           {!isMine && user && (

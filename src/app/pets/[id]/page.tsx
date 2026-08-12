@@ -46,7 +46,15 @@ export default function PetDetailPage() {
           </div>
 
           {pet.vaccine_records && pet.vaccine_records.length > 0 && (
-            <div><h3 className="font-semibold text-gray-900 mb-2">💉 疫苗记录</h3>{(pet.vaccine_records as any[]).map((v: any, i: number) => <div key={i} className="text-sm text-gray-600 flex justify-between py-1"><span>{v.name}</span><span>{v.date}</span></div>)}</div>
+            <div><h3 className="font-semibold text-gray-900 mb-2">💉 疫苗记录</h3>{(pet.vaccine_records as any[]).map((v: any, i: number) => {
+              const nextDate = v.next_date ? new Date(v.next_date) : null
+              const daysLeft = nextDate ? Math.ceil((nextDate.getTime() - Date.now()) / 86400000) : null
+              const isUrgent = daysLeft !== null && daysLeft <= 7 && daysLeft >= 0
+              return <div key={i} className={`text-sm flex justify-between py-1.5 px-2 rounded-lg ${isUrgent ? 'bg-red-50 text-red-600 font-medium' : 'text-gray-600'}`}>
+                <span>{v.name} {isUrgent && '⚠️'}</span>
+                <span>{v.date}{nextDate && ` → ${v.next_date}`}{isUrgent && ` (${daysLeft}天后到期)`}</span>
+              </div>
+            })})</div>
           )}
           {pet.allergies && <div><h3 className="font-semibold text-gray-900">⚠️ 过敏</h3><p className="text-sm text-red-500">{pet.allergies}</p></div>}
         </div>

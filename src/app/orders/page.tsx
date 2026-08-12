@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/lib/hooks/useAuth'
 import { getMyOrders } from '@/lib/db/orders'
+import EmptyState from '@/components/ui/EmptyState'
 import Loading from '@/components/ui/Loading'
 import type { Order } from '@/types'
 
@@ -32,7 +33,7 @@ export default function OrdersPage() {
         <h1 className="text-lg font-bold">📦 我的订单</h1>
       </div>
       {orders.length === 0 ? (
-        <div className="text-center py-20"><p className="text-4xl mb-3">📦</p><p className="text-gray-400">暂无订单</p></div>
+        <EmptyState icon="📦" title="暂无订单" />
       ) : (
         <div className="px-4 py-3 space-y-3">
           {orders.map((order) => {

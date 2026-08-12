@@ -4,6 +4,7 @@ import { useAuth } from '@/lib/hooks/useAuth'
 import { useConversations } from '@/lib/hooks/useMessages'
 import TabBar from '@/components/layout/TabBar'
 import ConversationList from '@/components/chat/ConversationList'
+import EmptyState from '@/components/ui/EmptyState'
 import Loading from '@/components/ui/Loading'
 import Link from 'next/link'
 

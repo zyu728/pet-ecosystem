@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
+import { createClient } from '@/lib/supabase/client'
 import { getShop, getShopProducts } from '@/lib/db/shops'
 import { createOrder } from '@/lib/db/orders'
 import { useAuth } from '@/lib/hooks/useAuth'
@@ -21,8 +22,14 @@ export default function ShopDetailPage() {
   const [deliveryAddress, setDeliveryAddress] = useState('')
   const [deliveryMethod, setDeliveryMethod] = useState('delivery')
   const [orderSuccess, setOrderSuccess] = useState(false)
+  const [reviews, setReviews] = useState<any[]>([])
+  const [showReviewForm, setShowReviewForm] = useState(false)
+  const [reviewRating, setReviewRating] = useState(5)
+  const [reviewContent, setReviewContent] = useState('')
+  const supabase = createClient()
 
   useEffect(() => { async function load() { const [s, p] = await Promise.all([getShop(id), getShopProducts(id)]); setShop(s); setProducts(p); setLoading(false) } load() }, [id])
+  useEffect(() => { supabase.from('reviews').select('*, author:profiles!reviews_user_id_fkey(nickname,avatar_url)').eq('shop_id', id).order('created_at', { ascending: false }).then(({ data }) => setReviews(data || [])) }, [id])
 
   const handleBuy = (product: ShopProduct) => {
     if (!user) { router.push('/auth/login'); return }
@@ -65,6 +72,41 @@ export default function ShopDetailPage() {
         <div className="mt-4">
           <h2 className="text-lg font-bold mb-3">{shop.type === 'pet_hospital' ? '🩺 医疗服务' : shop.type === 'grooming' ? '✂️ 美容服务' : '🛍️ 商品与服务'}</h2>
           {products.length === 0 ? <p className="text-gray-400 text-center py-8">暂无商品</p> : <div className="space-y-3">{products.map((p) => <ProductCard key={p.id} product={p} onBuy={handleBuy} />)}</div>}
+        </div>
+
+        {/* 评价 */}
+        <div className="mt-4">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-lg font-bold">⭐ 评价 ({reviews.length})</h2>
+            {user && <button onClick={() => setShowReviewForm(!showReviewForm)} className="text-sm text-orange-500 font-medium">写评价</button>}
+          </div>
+
+          {showReviewForm && (
+            <div className="bg-orange-50 rounded-xl p-4 mb-3">
+              <div className="flex items-center gap-1 mb-2">
+                {[1,2,3,4,5].map(s => <button key={s} onClick={() => setReviewRating(s)} className={`text-xl ${s <= reviewRating ? '' : 'opacity-30'}`}>⭐</button>)}
+              </div>
+              <textarea value={reviewContent} onChange={(e) => setReviewContent(e.target.value)} placeholder="分享你的体验..." rows={2} className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none" />
+              <button onClick={async () => {
+                if (!user || !reviewContent.trim()) return
+                await supabase.from('reviews').insert({ shop_id: id, user_id: user.id, rating: reviewRating, content: reviewContent.trim() })
+                setReviewContent(''); setShowReviewForm(false)
+                const { data } = await supabase.from('reviews').select('*, author:profiles!reviews_user_id_fkey(nickname,avatar_url)').eq('shop_id', id).order('created_at', { ascending: false })
+                setReviews(data || [])
+              }} className="bg-orange-500 text-white px-4 py-1.5 rounded-full text-sm font-medium mt-2">提交评价</button>
+            </div>
+          )}
+
+          {reviews.length === 0 ? <p className="text-gray-400 text-sm text-center py-4">暂无评价，第一个评价吧</p> : reviews.map((r: any) => (
+            <div key={r.id} className="bg-white border border-gray-100 rounded-xl p-3 mb-2">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-xs font-medium">{r.author?.nickname || '宠友'}</span>
+                <span className="text-xs text-amber-500">{'⭐'.repeat(r.rating)}</span>
+                <span className="text-[10px] text-gray-400">{new Date(r.created_at).toLocaleDateString()}</span>
+              </div>
+              <p className="text-sm text-gray-700">{r.content}</p>
+            </div>
+          ))}
         </div>
       </div>
 
