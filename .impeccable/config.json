@@ -1,0 +1,56 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "gray-on-color",
+        "value": "bg-gray-200 text-gray-600",
+        "createdAt": "2026-08-14T19:41:52.957Z",
+        "reason": "de-emphasized toggle state on neutral gray; not a saturated background"
+      },
+      {
+        "rule": "gray-on-color",
+        "value": "bg-gray-100 text-gray-600",
+        "createdAt": "2026-08-14T19:43:33.492Z",
+        "reason": "inactive segmented-control state on neutral gray; not a saturated background"
+      },
+      {
+        "rule": "gray-on-color",
+        "value": "bg-gray-100 text-gray-900",
+        "createdAt": "2026-08-14T19:45:15.306Z",
+        "reason": "standard chat bubble: gray-900 on gray-100 is 14:1 contrast, neutral not colored"
+      },
+      {
+        "rule": "gray-on-color",
+        "value": "bg-red-50 text-red-600",
+        "createdAt": "2026-08-14T19:45:15.426Z",
+        "reason": "warning tint with same-hue dark text, intentional status coding"
+      },
+      {
+        "rule": "gray-on-color",
+        "value": "bg-green-100 text-green-600",
+        "createdAt": "2026-08-14T19:47:53.087Z",
+        "reason": "standard same-hue status badge"
+      },
+      {
+        "rule": "gray-on-color",
+        "value": "bg-blue-100 text-blue-600",
+        "createdAt": "2026-08-14T19:47:53.209Z",
+        "reason": "standard same-hue status badge"
+      },
+      {
+        "rule": "gray-on-color",
+        "value": "bg-amber-100 text-amber-700",
+        "createdAt": "2026-08-14T19:47:53.339Z",
+        "reason": "standard same-hue status badge"
+      },
+      {
+        "rule": "gray-on-color",
+        "value": "bg-orange-100 text-orange-700",
+        "createdAt": "2026-08-14T19:47:53.480Z",
+        "reason": "standard same-hue status badge"
+      }
+    ]
+  }
+}

@@ -25,7 +25,7 @@ export default function PetDetailPage() {
   return (
     <div className="pb-20">
       <div className="h-56 bg-gradient-to-b from-orange-100 to-orange-50 flex flex-col items-center justify-center relative">
-        <button onClick={() => router.back()} className="absolute top-4 left-4 w-8 h-8 bg-white/80 rounded-full flex items-center justify-center shadow">←</button>
+        <button onClick={() => router.back()} aria-label="返回上一页" className="absolute top-4 left-4 w-10 h-10 bg-white/80 rounded-full flex items-center justify-center shadow">←</button>
         {isOwner && <button onClick={() => router.push(`/pets/${pet.id}/edit`)} className="absolute top-4 right-4 bg-white/80 px-3 py-1 rounded-full text-sm shadow">编辑</button>}
         <div className="text-7xl mb-2">{pet.species === 'dog' ? '🐶' : pet.species === 'cat' ? '🐱' : '🐹'}</div>
         <h1 className="text-2xl font-bold">{pet.name}</h1>

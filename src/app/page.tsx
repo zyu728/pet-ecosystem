@@ -5,7 +5,7 @@ export default function LandingPage() {
     <div className="min-h-screen bg-gradient-to-b from-orange-50 via-white to-white">
       {/* Hero */}
       <div className="text-center pt-16 pb-8 px-6">
-        <div className="text-7xl mb-4 animate-bounce-gentle">🐾</div>
+        <div className="text-7xl mb-4 animate-fade-in">🐾</div>
         <h1 className="text-3xl font-extrabold text-gray-900 mb-2">商丘宠物生态平台</h1>
         <p className="text-gray-500 text-sm">找店铺 · 查医院 · 宠友交流 · GPS追踪</p>
       </div>

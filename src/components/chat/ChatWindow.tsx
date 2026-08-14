@@ -57,7 +57,7 @@ export default function ChatWindow({ conversationId }: { conversationId: string 
       </div>
       <div className="border-t bg-white px-4 py-3 safe-bottom">
         <div className="flex items-center gap-2">
-          <button onClick={() => fileRef.current?.click()} disabled={uploading} className="text-gray-400 text-xl flex-shrink-0">{uploading ? '⏳' : '📷'}</button>
+          <button onClick={() => fileRef.current?.click()} disabled={uploading} aria-label="发送图片" className="text-gray-400 text-xl flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 disabled:opacity-50">{uploading ? '⏳' : '📷'}</button>
           <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleImage} />
           <input type="text" value={text} onChange={(e) => setText(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleSend() } }} placeholder="输入消息..." className="flex-1 bg-gray-100 rounded-full px-4 py-2.5 outline-none text-sm" />
           <button disabled={!text.trim()} onClick={handleSend} className="bg-orange-500 text-white px-4 py-2 rounded-full text-sm font-medium disabled:opacity-50">发送</button>

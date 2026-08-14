@@ -50,6 +50,7 @@ export default function CommunityPage() {
             if (!user) { router.push('/auth/login'); return }
             setShowCreate(true)
           }}
+          aria-label="发布新动态"
           className="fixed bottom-20 right-4 w-14 h-14 bg-orange-500 text-white rounded-full shadow-lg flex items-center justify-center text-2xl active:scale-95 transition-all z-20"
         >
           +

@@ -63,8 +63,8 @@ export default function PostCard({ post, onUpdate }: { post: Post; onUpdate: () 
 
   const typeStyles: Record<string, string> = {
     normal: '',
-    help: 'border-l-4 border-red-400 bg-red-50/30',
-    lost: 'border-l-4 border-amber-400 bg-amber-50/30',
+    help: 'bg-red-50/40 ring-1 ring-red-200',
+    lost: 'bg-amber-50/40 ring-1 ring-amber-200',
   }
   const typeBadge: Record<string, string> = { help: '🆘 求助', lost: '🔍 走失' }
 
@@ -84,7 +84,7 @@ export default function PostCard({ post, onUpdate }: { post: Post; onUpdate: () 
         </div>
         <div className="flex items-center gap-2">
           {!isMine && user && (
-            <button onClick={handleFollow} className={`text-xs px-2 py-0.5 rounded-full font-medium ${following ? 'bg-gray-100 text-gray-400' : 'bg-orange-100 text-orange-500'}`}>
+            <button onClick={handleFollow} aria-label={following ? '取消关注' : '关注该用户'} className={`text-xs px-3 py-1 rounded-full font-medium ${following ? 'bg-gray-200 text-gray-600' : 'bg-orange-100 text-orange-700'}`}>
               {following ? '已关注' : '+ 关注'}
             </button>
           )}

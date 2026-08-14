@@ -51,7 +51,7 @@ export default function ShopDetailPage() {
       <div className="h-48 bg-gradient-to-b from-orange-100 to-orange-50 flex items-center justify-center text-6xl">
         {shop.type === 'pet_hospital' ? '🏥' : shop.type === 'grooming' ? '✂️' : '🏪'}
       </div>
-      <button onClick={() => router.back()} className="absolute top-4 left-4 w-8 h-8 bg-white/80 rounded-full flex items-center justify-center text-gray-600 shadow">←</button>
+      <button onClick={() => router.back()} aria-label="返回上一页" className="absolute top-4 left-4 w-10 h-10 bg-white/80 rounded-full flex items-center justify-center text-gray-600 shadow">←</button>
 
       <div className="px-4 -mt-6 relative z-10">
         <div className="bg-white rounded-2xl shadow-lg p-5">

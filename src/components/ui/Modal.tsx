@@ -22,7 +22,7 @@ export default function Modal({ isOpen, onClose, title, children }: ModalProps) 
         {title && (
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold">{title}</h3>
-            <button onClick={onClose} className="text-gray-400 text-xl">&times;</button>
+            <button onClick={onClose} aria-label="关闭弹窗" className="text-gray-400 text-xl w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100">&times;</button>
           </div>
         )}
         {children}
