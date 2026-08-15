@@ -9,6 +9,7 @@ import CreatePostModal from '@/components/community/CreatePostModal'
 import TabBar from '@/components/layout/TabBar'
 import EmptyState from '@/components/ui/EmptyState'
 import Loading from '@/components/ui/Loading'
+import { IconPlus } from '@/components/ui/Icons'
 import type { Post } from '@/types'
 
 export default function CommunityPage() {
@@ -30,8 +31,8 @@ export default function CommunityPage() {
   return (
     <>
       <div className="pb-14">
-        <div className="sticky top-0 bg-white z-10 px-4 pt-4 pb-2 border-b">
-          <h1 className="text-xl font-bold">🐾 社区</h1>
+        <div className="page-header">
+          <h1 className="text-[17px] font-semibold tracking-tight">社区</h1>
         </div>
 
         {loading ? <Loading /> : posts.length === 0 ? (
@@ -51,9 +52,9 @@ export default function CommunityPage() {
             setShowCreate(true)
           }}
           aria-label="发布新动态"
-          className="fixed bottom-20 right-4 w-14 h-14 bg-orange-500 text-white rounded-full shadow-lg flex items-center justify-center text-2xl active:scale-95 transition-all z-20"
+          className="fixed bottom-20 right-4 w-[52px] h-[52px] bg-ink-primary text-white rounded-full shadow-float-lg flex items-center justify-center press z-20"
         >
-          +
+          <IconPlus size={22} />
         </button>
       </div>
 

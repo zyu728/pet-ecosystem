@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/lib/hooks/useAuth'
+import { IconHeart, IconChat } from '@/components/ui/Icons'
 import { toggleLike, deletePost, getComments, addComment, toggleFollow, isFollowing } from '@/lib/db/community'
 import type { Post, PostComment } from '@/types'
 
@@ -63,74 +64,79 @@ export default function PostCard({ post, onUpdate }: { post: Post; onUpdate: () 
 
   const typeStyles: Record<string, string> = {
     normal: '',
-    help: 'bg-red-50/40 ring-1 ring-red-200',
-    lost: 'bg-amber-50/40 ring-1 ring-amber-200',
+    help: '',
+    lost: '',
   }
-  const typeBadge: Record<string, string> = { help: '🆘 求助', lost: '🔍 走失' }
+  const typeBadge: Record<string, { label: string; cls: string }> = {
+    help: { label: '求助', cls: 'text-status-danger border-status-danger/30 bg-red-50' },
+    lost: { label: '走失', cls: 'text-status-warning border-status-warning/30 bg-amber-50' },
+  }
 
   return (
-    <div className={`bg-white rounded-xl shadow-sm p-4 ${typeStyles[(post as any).post_type || 'normal']}`}>
+    <div className={`card p-4 ${typeStyles[(post as any).post_type || 'normal']}`}>
       {/* 头部 */}
       <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-full bg-orange-100 text-orange-500 flex items-center justify-center text-sm font-medium">
-            {post.author?.nickname?.[0] || '🐾'}
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-full bg-surface-subtle text-ink-secondary flex items-center justify-center text-[13px] font-medium">
+            {post.author?.nickname?.[0] || '宠'}
           </div>
           <div>
-            <p className="text-sm font-medium">{post.author?.nickname || '宠友'}</p>
-            <p className="text-xs text-gray-400">{timeStr}{post.pet ? ` · ${post.pet.name}` : ''}</p>
+            <p className="text-[13px] font-medium text-ink-primary">{post.author?.nickname || '宠友'}</p>
+            <p className="text-[11px] text-ink-muted tabular">{timeStr}{post.pet ? ` · ${post.pet.name}` : ''}</p>
           </div>
-          {(post as any).post_type !== 'normal' && <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${(post as any).post_type === 'help' ? 'bg-red-100 text-red-600' : 'bg-amber-100 text-amber-700'}`}>{typeBadge[(post as any).post_type]}</span>}
+          {(post as any).post_type !== 'normal' && (
+            <span className={`text-[10px] px-1.5 py-0.5 rounded border font-medium ${typeBadge[(post as any).post_type].cls}`}>{typeBadge[(post as any).post_type].label}</span>
+          )}
         </div>
         <div className="flex items-center gap-2">
           {!isMine && user && (
-            <button onClick={handleFollow} aria-label={following ? '取消关注' : '关注该用户'} className={`text-xs px-3 py-1 rounded-full font-medium ${following ? 'bg-gray-200 text-gray-600' : 'bg-orange-100 text-orange-700'}`}>
-              {following ? '已关注' : '+ 关注'}
+            <button onClick={handleFollow} aria-label={following ? '取消关注' : '关注该用户'} className={`text-[11px] px-2.5 py-1 rounded-btn font-medium transition-colors ${following ? 'text-ink-muted border border-line-hairline' : 'bg-ink-primary text-white'}`}>
+              {following ? '已关注' : '关注'}
             </button>
           )}
-          {isMine && <button onClick={handleDelete} className="text-gray-300 text-xs">删除</button>}
+          {isMine && <button onClick={handleDelete} className="text-ink-muted text-[11px]">删除</button>}
         </div>
       </div>
 
       {/* 内容 */}
-      <p className="text-gray-800 text-sm mb-3 leading-relaxed">{post.content}</p>
+      <p className="text-[14px] text-ink-primary leading-relaxed mb-3">{post.content}</p>
       {post.images && post.images.length > 0 && (
-        <div className={`grid gap-2 mb-3 ${post.images.length === 1 ? 'grid-cols-1' : 'grid-cols-2'}`}>
+        <div className={`grid gap-1.5 mb-3 ${post.images.length === 1 ? 'grid-cols-1' : 'grid-cols-2'}`}>
           {post.images.map((img, i) => (
-            <img key={i} src={img} alt="" className="w-full h-48 object-cover rounded-xl" loading="lazy" />
+            <img key={i} src={img} alt="" className="w-full h-44 object-cover rounded-btn" loading="lazy" />
           ))}
         </div>
       )}
 
       {/* 操作栏 */}
-      <div className="flex items-center gap-4 border-t pt-3">
-        <button onClick={handleLike} className={`flex items-center gap-1 text-sm ${post.liked_by_me ? 'text-red-500' : 'text-gray-400'}`}>
-          {post.liked_by_me ? '❤️' : '🤍'} {post.likes_count || 0}
+      <div className="flex items-center gap-5 border-t border-line-hairline pt-2.5">
+        <button onClick={handleLike} aria-label={post.liked_by_me ? '取消点赞' : '点赞'} className={`flex items-center gap-1.5 text-[13px] tabular transition-colors ${post.liked_by_me ? 'text-status-danger' : 'text-ink-muted hover:text-ink-secondary'}`}>
+          <IconHeart size={16} filled={post.liked_by_me} /> {post.likes_count || 0}
         </button>
-        <button onClick={loadComments} className="flex items-center gap-1 text-sm text-gray-400">
-          💬 {post.comments_count || 0}
+        <button onClick={loadComments} aria-label="查看评论" className="flex items-center gap-1.5 text-[13px] tabular text-ink-muted hover:text-ink-secondary transition-colors">
+          <IconChat size={16} /> {post.comments_count || 0}
         </button>
       </div>
 
       {/* 评论列表 */}
       {showComments && (
-        <div className="border-t mt-3 pt-3">
+        <div className="border-t border-line-hairline mt-2.5 pt-2.5">
           {loadingComments ? (
-            <p className="text-xs text-gray-400 text-center py-2">加载中...</p>
+            <p className="text-xs text-ink-muted text-center py-2">加载中</p>
           ) : comments.length === 0 ? (
-            <p className="text-xs text-gray-400 text-center py-2">暂无评论</p>
+            <p className="text-xs text-ink-muted text-center py-2">暂无评论</p>
           ) : (
-            <div className="space-y-2 mb-3">
+            <div className="space-y-1.5 mb-2.5">
               {comments.map((c) => (
-                <div key={c.id} className="bg-gray-50 rounded-lg px-3 py-2">
-                  <p className="text-xs"><span className="font-medium">{c.author?.nickname || '宠友'}</span> <span className="text-gray-500">{c.content}</span></p>
+                <div key={c.id} className="bg-surface-subtle rounded-btn px-3 py-2">
+                  <p className="text-xs leading-relaxed"><span className="font-medium text-ink-primary">{c.author?.nickname || '宠友'}</span> <span className="text-ink-secondary">{c.content}</span></p>
                 </div>
               ))}
             </div>
           )}
           <div className="flex gap-2">
-            <input type="text" value={commentText} onChange={(e) => setCommentText(e.target.value)} placeholder="写评论..." className="flex-1 bg-gray-100 rounded-full px-3 py-1.5 text-xs outline-none" />
-            <button onClick={handleAddComment} disabled={!commentText.trim()} className="text-orange-500 text-xs font-medium disabled:opacity-30">发送</button>
+            <input type="text" value={commentText} onChange={(e) => setCommentText(e.target.value)} placeholder="写评论…" className="flex-1 bg-surface-subtle rounded-btn px-3 py-2 text-xs outline-none focus:ring-1 focus:ring-ink-faint" />
+            <button onClick={handleAddComment} disabled={!commentText.trim()} className="text-ink-primary text-xs font-medium disabled:opacity-30">发送</button>
           </div>
         </div>
       )}

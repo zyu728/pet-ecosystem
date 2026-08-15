@@ -22,22 +22,23 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   const toast = useCallback((message: string, type: ToastType = 'info') => {
     const id = ++toastId
     setToasts((prev) => [...prev, { id, type, message }])
-    setTimeout(() => setToasts((prev) => prev.filter((t) => t.id !== id)), 3000)
+    setTimeout(() => setToasts((prev) => prev.filter((t) => t.id !== id)), 2500)
   }, [])
 
-  const colors: Record<ToastType, string> = {
-    success: 'bg-green-500',
-    error: 'bg-red-500',
-    info: 'bg-gray-800',
+  const dotColors: Record<ToastType, string> = {
+    success: 'bg-status-success',
+    error: 'bg-status-danger',
+    info: 'bg-ink-muted',
   }
 
   return (
     <ToastContext.Provider value={{ toast }}>
       {children}
-      <div className="fixed top-4 left-1/2 -translate-x-1/2 z-[200] flex flex-col gap-2 w-[90%] max-w-[400px]">
+      <div className="fixed top-4 left-1/2 -translate-x-1/2 z-[200] flex flex-col gap-2 w-[90%] max-w-[360px]">
         {toasts.map((t) => (
-          <div key={t.id} className={`${colors[t.type]} text-white px-4 py-3 rounded-xl shadow-lg text-sm text-center animate-[slide-up_0.2s_ease-out]`}>
-            {t.message}
+          <div key={t.id} className="flex items-center gap-2.5 bg-ink-primary/95 text-white px-4 py-2.5 rounded-btn shadow-float animate-scale-in">
+            <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${dotColors[t.type]}`} />
+            <p className="text-[13px] leading-snug">{t.message}</p>
           </div>
         ))}
       </div>

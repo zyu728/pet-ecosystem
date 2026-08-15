@@ -5,6 +5,7 @@ import { useAuth } from '@/lib/hooks/useAuth'
 import { useChat } from '@/lib/hooks/useMessages'
 import { markAsRead } from '@/lib/db/messages'
 import { uploadImage } from '@/lib/upload'
+import { IconCamera } from '@/components/ui/Icons'
 
 export default function ChatWindow({ conversationId }: { conversationId: string }) {
   const { user } = useAuth()
@@ -42,12 +43,12 @@ export default function ChatWindow({ conversationId }: { conversationId: string 
           const isMe = msg.sender_id === user?.id
           return (
             <div key={msg.id} className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}>
-              <div className={`max-w-[75%] px-4 py-2.5 rounded-2xl text-sm ${isMe ? 'bg-orange-500 text-white rounded-br-md' : 'bg-gray-100 text-gray-900 rounded-bl-md'}`}>
+              <div className={`max-w-[75%] px-4 py-2.5 rounded-2xl text-sm ${isMe ? 'bg-ink-primary text-white rounded-br-md' : 'bg-surface-subtle text-ink-primary rounded-bl-md'}`}>
                 {msg.content !== '📷' && msg.content}
                 {msg.image_url && <img src={msg.image_url} alt="" className="mt-1 rounded-lg max-w-full" loading="lazy" />}
-                <p className={`text-[10px] mt-1 flex items-center gap-1 ${isMe ? 'text-orange-100' : 'text-gray-400'}`}>
+                <p className={`text-[10px] mt-1 flex items-center gap-1 tabular ${isMe ? 'text-white/50' : 'text-ink-muted'}`}>
                   {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                  {isMe && (msg as any).read_at && <span>✓✓</span>}
+                  {isMe && (msg as any).read_at && <span className="text-white/70">✓✓</span>}
                 </p>
               </div>
             </div>
@@ -55,12 +56,14 @@ export default function ChatWindow({ conversationId }: { conversationId: string 
         })}
         <div ref={bottomRef} />
       </div>
-      <div className="border-t bg-white px-4 py-3 safe-bottom">
+      <div className="border-t border-line-hairline bg-surface-card px-4 py-3 safe-bottom">
         <div className="flex items-center gap-2">
-          <button onClick={() => fileRef.current?.click()} disabled={uploading} aria-label="发送图片" className="text-gray-400 text-xl flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 disabled:opacity-50">{uploading ? '⏳' : '📷'}</button>
+          <button onClick={() => fileRef.current?.click()} disabled={uploading} aria-label="发送图片" className="text-ink-muted flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-subtle transition-colors disabled:opacity-50">
+            <IconCamera size={19} />
+          </button>
           <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleImage} />
-          <input type="text" value={text} onChange={(e) => setText(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleSend() } }} placeholder="输入消息..." className="flex-1 bg-gray-100 rounded-full px-4 py-2.5 outline-none text-sm" />
-          <button disabled={!text.trim()} onClick={handleSend} className="bg-orange-500 text-white px-4 py-2 rounded-full text-sm font-medium disabled:opacity-50">发送</button>
+          <input type="text" value={text} onChange={(e) => setText(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleSend() } }} placeholder="输入消息…" className="flex-1 bg-surface-subtle rounded-full px-4 py-2.5 outline-none text-sm text-ink-primary placeholder:text-ink-muted" />
+          <button disabled={!text.trim()} onClick={handleSend} className="bg-ink-primary text-white px-5 py-2 rounded-full text-[13px] font-medium press disabled:opacity-40">发送</button>
         </div>
       </div>
     </div>

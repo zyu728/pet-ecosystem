@@ -32,32 +32,40 @@ function isOpen(businessHours: string | null): boolean {
   } catch { return true }
 }
 
+function StarRating({ rating }: { rating: number }) {
+  const full = Math.round(rating)
+  return (
+    <span className="text-status-warning text-xs tabular" aria-label={`评分 ${rating}`}>
+      {'★'.repeat(full)}<span className="text-ink-faint">{'★'.repeat(5 - full)}</span>
+      <span className="ml-1 text-ink-secondary">{rating.toFixed(1)}</span>
+    </span>
+  )
+}
+
 export default function ShopCard({ shop }: { shop: Shop }) {
   const dist = getDistanceText(shop)
   const open = isOpen(shop.business_hours)
 
   return (
     <Link href={`/shops/${shop.id}`} className="block">
-      <div className="bg-white rounded-card shadow-card p-4 flex gap-4 active:scale-[0.98] transition-all">
-        <div className={`w-20 h-20 rounded-xl flex-shrink-0 flex items-center justify-center text-3xl ${shop.type === 'pet_hospital' ? 'bg-red-50' : shop.type === 'grooming' ? 'bg-purple-50' : 'bg-blue-50'}`}>
+      <div className="card p-3.5 press flex items-center gap-3.5">
+        <div className={`w-12 h-12 rounded-btn flex-shrink-0 flex items-center justify-center text-xl ${shop.type === 'pet_hospital' ? 'bg-red-50' : shop.type === 'grooming' ? 'bg-purple-50' : 'bg-blue-50'}`}>
           {shop.type === 'pet_hospital' ? '🏥' : shop.type === 'grooming' ? '✂️' : '🏪'}
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <h3 className="font-semibold text-gray-900 truncate">{shop.name}</h3>
-            <span className={`text-[10px] px-1.5 py-0.5 rounded-full flex-shrink-0 ${open ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-400'}`}>{open ? '🟢 营业' : '🔴 休息'}</span>
+            <h3 className="text-sm font-semibold tracking-tight text-ink-primary truncate">{shop.name}</h3>
+            <span className={`flex-shrink-0 w-1.5 h-1.5 rounded-full ${open ? 'bg-status-success' : 'bg-ink-faint'}`} aria-label={open ? '营业中' : '休息中'} />
           </div>
-          <p className="text-xs text-gray-400 mt-0.5">
+          <p className="text-xs text-ink-muted mt-0.5">
             {typeLabels[shop.type]}
-            {shop.rating > 0 && (
-              <span className="ml-2 text-amber-500">{'⭐'.repeat(Math.round(shop.rating))} {shop.rating.toFixed(1)}</span>
-            )}
+            {shop.rating > 0 && <span className="ml-1.5"><StarRating rating={shop.rating} /></span>}
           </p>
-          <p className="text-sm text-gray-500 mt-1 truncate">{shop.address}</p>
-          <div className="flex items-center gap-3 mt-1.5">
-            {dist && <span className="text-xs text-blue-500">📍 {dist}</span>}
-            {shop.phone && <span className="text-xs text-gray-400">📞 {shop.phone}</span>}
-          </div>
+          <p className="text-xs text-ink-secondary mt-1 truncate">{shop.address}</p>
+        </div>
+        <div className="text-right flex-shrink-0">
+          {dist && <p className="text-xs font-medium text-ink-secondary tabular">📍 {dist}</p>}
+          <p className={`text-[10px] mt-0.5 ${open ? 'text-status-success' : 'text-ink-muted'}`}>{open ? '营业中' : '休息中'}</p>
         </div>
       </div>
     </Link>

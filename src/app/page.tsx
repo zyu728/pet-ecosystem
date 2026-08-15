@@ -1,58 +1,57 @@
 import Link from 'next/link'
+import { IconMap, IconCommunity, IconLocate } from '@/components/ui/Icons'
+
+const features = [
+  { icon: <IconMap size={20} />, title: '宠物地图', desc: '商丘宠物店与医院，一图尽览' },
+  { icon: <IconCommunity size={20} />, title: '宠友社区', desc: '求助 · 走失 · 分享，互助同行' },
+  { icon: <IconLocate size={20} />, title: '实时追踪', desc: 'GPS定位与电子围栏守护' },
+]
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-orange-50 via-white to-white">
+    <div className="min-h-screen bg-surface-bg">
       {/* Hero */}
-      <div className="text-center pt-16 pb-8 px-6">
-        <div className="text-7xl mb-4 animate-fade-in">🐾</div>
-        <h1 className="text-3xl font-extrabold text-gray-900 mb-2">商丘宠物生态平台</h1>
-        <p className="text-gray-500 text-sm">找店铺 · 查医院 · 宠友交流 · GPS追踪</p>
+      <div className="pt-16 pb-10 px-6 text-center">
+        <div className="w-14 h-14 mx-auto mb-6 rounded-2xl bg-ink-primary flex items-center justify-center text-ink-primary" aria-hidden>
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 3c-3 3-6 4.5-6 8a6 6 0 0012 0c0-3.5-3-5-6-8z" />
+            <circle cx="9.5" cy="10.5" r="0.8" fill="white" stroke="none" />
+            <circle cx="14.5" cy="10.5" r="0.8" fill="white" stroke="none" />
+            <path d="M10.5 13c.5.5 2.5.5 3 0" />
+          </svg>
+        </div>
+        <h1 className="text-[28px] font-bold tracking-tight text-ink-primary">商丘宠物生态平台</h1>
+        <p className="text-sm text-ink-muted mt-2.5 leading-relaxed">找店铺 · 查医院 · 宠友交流 · 位置追踪</p>
       </div>
 
-      {/* 统计 */}
-      <div className="flex justify-center gap-8 py-6">
-        {[
-          { num: '13', label: '宠物店铺' }, { num: '4', label: '宠物医院' }, { num: '0', label: '宠友在线', sub: '等你加入' }
-        ].map((s) => (
-          <div key={s.label} className="text-center">
-            <p className="text-2xl font-extrabold text-orange-500">{s.num}</p>
-            <p className="text-xs text-gray-400">{s.label}</p>
-            {s.sub && <p className="text-[10px] text-gray-300">{s.sub}</p>}
-          </div>
-        ))}
-      </div>
-
-      {/* 功能卡片 */}
-      <div className="px-6 grid grid-cols-2 gap-3 mb-6">
-        {[
-          { icon: '🗺️', title: '宠物地图', desc: '一键查找附近店铺' },
-          { icon: '🐾', title: '宠友社区', desc: '晒宠·交流·求助' },
-          { icon: '📍', title: 'GPS追踪', desc: '实时定位·电子围栏' },
-          { icon: '🎁', title: '免费项圈', desc: '注册即送追踪项圈' },
-        ].map((f) => (
-          <div key={f.title} className="bg-white rounded-card shadow-card p-4 text-center">
-            <div className="text-3xl mb-2">{f.icon}</div>
-            <p className="font-bold text-sm text-gray-800">{f.title}</p>
-            <p className="text-xs text-gray-400 mt-1">{f.desc}</p>
+      {/* 功能列表 */}
+      <div className="mx-6 mb-8 card divide-y divide-line-hairline">
+        {features.map((f) => (
+          <div key={f.title} className="flex items-center gap-4 px-4 py-4">
+            <span className="text-ink-secondary flex-shrink-0">{f.icon}</span>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold tracking-tight text-ink-primary">{f.title}</p>
+              <p className="text-xs text-ink-muted mt-0.5">{f.desc}</p>
+            </div>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-ink-faint flex-shrink-0">
+              <path d="M9 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
           </div>
         ))}
       </div>
 
       {/* CTA */}
-      <div className="px-6 space-y-3">
-        <Link href="/map" className="block w-full bg-orange-500 text-white text-center py-3.5 rounded-btn font-bold text-base shadow-float active:scale-[0.98] transition-all">
-          🐾 直接开始使用
+      <div className="px-6 space-y-2.5 pb-12">
+        <Link href="/map" className="block w-full bg-ink-primary text-white text-center py-3.5 rounded-btn font-medium text-[15px] press">
+          开始使用
         </Link>
-        <Link href="/auth/login" className="block w-full bg-white border border-gray-200 text-gray-700 text-center py-3.5 rounded-btn font-medium text-sm active:scale-[0.98] transition-all">
+        <Link href="/auth/login" className="block w-full bg-surface-card text-ink-secondary text-center py-3.5 rounded-btn font-medium text-[15px] border border-line-hairline press">
           登录 / 注册
         </Link>
       </div>
 
-      {/* 底部 */}
-      <div className="text-center py-8 mt-4">
-        <p className="text-xs text-gray-300">商丘 · 宠物生活新方式</p>
-        <p className="text-xs text-gray-300 mt-1">bare-lash.com</p>
+      <div className="text-center pb-10">
+        <p className="text-[11px] text-ink-faint">商丘 · 宠物生活新方式</p>
       </div>
     </div>
   )

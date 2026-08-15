@@ -51,18 +51,18 @@ export default function DiscoverPage() {
   return (
     <>
       <div className="pb-14">
-        <div className="sticky top-0 bg-white/90 backdrop-blur z-10 px-4 pt-4 pb-2 border-b border-gray-100">
-          <h1 className="text-xl font-bold mb-3">🔍 发现</h1>
-          <div className="flex gap-2 mb-2">
-            <input type="text" value={search} onChange={(e) => handleSearch(e.target.value)} placeholder="搜索店铺..." className="flex-1 bg-gray-100 rounded-full px-4 py-2 text-sm outline-none" />
-            <select value={sortBy} onChange={(e) => setSortBy(e.target.value as any)} className="bg-gray-100 rounded-full px-3 py-2 text-sm outline-none">
+        <div className="page-header">
+          <h1 className="text-[17px] font-semibold tracking-tight mb-3">发现</h1>
+          <div className="flex gap-2 mb-2.5">
+            <input type="text" value={search} onChange={(e) => handleSearch(e.target.value)} placeholder="搜索店铺…" className="flex-1 bg-surface-subtle rounded-btn px-3.5 py-2 text-[13px] outline-none text-ink-primary placeholder:text-ink-muted" />
+            <select value={sortBy} onChange={(e) => setSortBy(e.target.value as any)} className="bg-surface-subtle rounded-btn px-3 py-2 text-[13px] outline-none text-ink-secondary border-0">
               <option value="distance">距离最近</option>
               <option value="rating">评分最高</option>
             </select>
           </div>
-          <div className="flex gap-2 overflow-x-auto pb-2">
+          <div className="flex gap-1.5 overflow-x-auto pb-0.5">
             {categories.map((cat) => (
-              <button key={cat.value} onClick={() => setActiveFilter(cat.value)} className={`flex-shrink-0 px-4 py-1.5 rounded-full text-sm font-medium transition-all ${activeFilter === cat.value ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-600'}`}>{cat.label}</button>
+              <button key={cat.value} onClick={() => setActiveFilter(cat.value)} className={`flex-shrink-0 px-3.5 py-1.5 rounded-full text-[13px] font-medium transition-colors duration-150 border ${activeFilter === cat.value ? 'bg-ink-primary text-white border-ink-primary' : 'bg-surface-card text-ink-secondary border-line-hairline'}`}>{cat.label}</button>
             ))}
           </div>
         </div>
