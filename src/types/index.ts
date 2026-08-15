@@ -182,6 +182,18 @@ export interface PostComment {
 
 // ===== 电子围栏类型 =====
 
+export interface HealthRecord {
+  id: string
+  pet_id: string
+  record_type: 'vaccine' | 'visit' | 'weight' | 'medication' | 'surgery' | 'other'
+  title: string
+  note: string | null
+  record_date: string
+  next_date: string | null
+  weight_kg: number | null
+  created_at: string
+}
+
 export interface LostPet {
   id: string
   pet_id: string
