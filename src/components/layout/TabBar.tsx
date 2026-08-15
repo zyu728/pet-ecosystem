@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useAuth } from '@/lib/hooks/useAuth'
 import { createClient } from '@/lib/supabase/client'
-import { IconMap, IconCommunity, IconSearch, IconChat, IconUser, IconSettings } from '@/components/ui/Icons'
+import { IconLocate, IconCommunity, IconSearch, IconChat, IconUser, IconSettings } from '@/components/ui/Icons'
 
 export default function TabBar() {
   const pathname = usePathname()
@@ -37,7 +37,7 @@ export default function TabBar() {
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 bg-surface-card/95 backdrop-blur-lg border-t border-line-hairline safe-bottom max-w-[480px] mx-auto">
       <div className="flex justify-around items-center h-14">
-        <Tab href="/map" icon={<IconMap size={21} />} label="地图" />
+        <Tab href="/guard" icon={<IconLocate size={21} />} label="守护" />
         <Tab href="/community" icon={<IconCommunity size={21} />} label="社区" />
         <Tab href="/discover" icon={<IconSearch size={21} />} label="发现" />
         {isShopOwner && <Tab href="/dashboard" icon={<IconSettings size={21} />} label="管理" />}

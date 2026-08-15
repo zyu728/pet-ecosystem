@@ -21,7 +21,7 @@ export default function LandingPage() {
           </svg>
         </div>
         <h1 className="text-[28px] font-bold tracking-tight text-ink-primary">商丘宠物生态平台</h1>
-        <p className="text-sm text-ink-muted mt-2.5 leading-relaxed">找店铺 · 查医院 · 宠友交流 · 位置追踪</p>
+        <p className="text-sm text-ink-muted mt-2.5 leading-relaxed">GPS 实时追踪 · 电子围栏 · 走失互助 · 宠友社区</p>
       </div>
 
       {/* 功能列表 */}
@@ -42,7 +42,7 @@ export default function LandingPage() {
 
       {/* CTA */}
       <div className="px-6 space-y-2.5 pb-12">
-        <Link href="/map" className="block w-full bg-ink-primary text-white text-center py-3.5 rounded-btn font-medium text-[15px] press">
+        <Link href="/guard" className="block w-full bg-ink-primary text-white text-center py-3.5 rounded-btn font-medium text-[15px] press">
           开始使用
         </Link>
         <Link href="/auth/login" className="block w-full bg-surface-card text-ink-secondary text-center py-3.5 rounded-btn font-medium text-[15px] border border-line-hairline press">

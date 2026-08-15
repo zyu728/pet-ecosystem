@@ -182,6 +182,23 @@ export interface PostComment {
 
 // ===== 电子围栏类型 =====
 
+export interface LostPet {
+  id: string
+  pet_id: string
+  owner_id: string
+  last_seen_lat: number | null
+  last_seen_lng: number | null
+  last_seen_at: string | null
+  note: string | null
+  reward: string | null
+  contact: string | null
+  status: 'active' | 'found'
+  found_at: string | null
+  created_at: string
+  pet?: { name: string; species: string; breed: string; avatar_url: string }
+  owner?: { nickname: string; avatar_url: string }
+}
+
 export interface Geofence {
   id: string
   pet_id: string

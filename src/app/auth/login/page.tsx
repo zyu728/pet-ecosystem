@@ -23,7 +23,7 @@ export default function LoginPage() {
 
     const { error: signInError } = await supabase.auth.signInWithPassword({ email, password })
     if (signInError) { setError('登录失败: ' + signInError.message); setLoading(false); return }
-    router.push('/map'); router.refresh()
+    router.push('/guard'); router.refresh()
   }
 
   return (
